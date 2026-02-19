@@ -88,12 +88,15 @@
   }
   
   .card2:hover .face2.front2 {
-    height: 60px;
+    height: 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    
   }
   
   .card2:hover .face2.front2 b {
-    
-    font-size: 2em;
+    font-size: 1.2em;
   }
   
   .face2.front2 {
