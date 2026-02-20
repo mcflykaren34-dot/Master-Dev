@@ -1,12 +1,14 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
-require('./conn/db');
+require('./config/mongoose').connect();
+
 const bodyParser = require('body-parser');
+
 const usersRoute = require('./routes/users.js');
 const questionsRoute = require('./routes/questions.js');
 const customerRoute = require('./routes/customer.js');
 const phoneRoute = require('./routes/phone.js');
+const config = require('./config/config.js');
 const app = express();
 const corsOpts = {
   origin: '*',
@@ -26,12 +28,12 @@ app.use(cors(corsOpts));
 app.use(express.json());
 
 
-app.use('',customerRoute);
+app.use('', customerRoute);
 app.use('/api/users', usersRoute);
 app.use('/api/form', questionsRoute);
-app.use('',phoneRoute);
+app.use('', phoneRoute);
 
-app.listen(5000, () => {
-  console.log('Server is running on port 5000');
+app.listen(config.server.port, () => {
+  console.log(`🚀 Server is running on port ${config.server.port}`);
 });
 
