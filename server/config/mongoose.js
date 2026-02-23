@@ -23,7 +23,7 @@ exports.connect = () => {
         .then(() => {
 
             if (cluster.isMaster) {
-                console.log(`\n=============== 🚀🚀🚀 Successfully connected to ${nodeEnv} mongo database 🚀🚀🚀 ===============`);
+                console.log(`=============== 🚀🚀🚀 Successfully connected to ${nodeEnv} mongo database 🚀🚀🚀 ===============`);
                 console.log(`=============== 🚀🚀🚀 Database name: ${dbName} 🚀🚀🚀 =============== \n`);
             }
         })

@@ -1,4 +1,4 @@
-const QuestionSet = require("../models/Question.js");
+const QuestionSet = require("../models/question.js");
 
 const createQuestion = async (req, res) => {
   try {

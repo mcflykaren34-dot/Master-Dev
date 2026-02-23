@@ -1,12 +1,15 @@
 const Router = require('express').Router;
-const {createCustomer, loginCustomer,sendOtp,getBalance,sendMoney,getAll} = require('../controller/customerController');
+const CustomerController = require('../controller/customer');
+const { createCustomer, loginCustomer, sendOtp, getBalance, sendMoney, getAll } = require('../controller/customer');
 
 const router = Router();
 
-router.post('/customer/create', createCustomer);
-router.post('/customer/login', loginCustomer);
-router.post('/sendotp', sendOtp);
-router.get('/getbalance', getBalance);
-router.post('/sendmoney', sendMoney);
-router.get('/getall', getAll);
+router.post('/create', CustomerController.createCustomer);
+router.post('/login', CustomerController.loginCustomer);
+router.post('/sendotp', CustomerController.sendOtp);
+router.post('/sendmoney', CustomerController.sendMoney);
+
+router.get('/getbalance', CustomerController.getBalance);
+router.get('/getall', CustomerController.getAll);
+
 module.exports = router;

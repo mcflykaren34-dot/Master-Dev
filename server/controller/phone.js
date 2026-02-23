@@ -1,4 +1,4 @@
-const phoneSchema = require("../models/phoneSchema.js");
+const phoneSchema = require("../models/phone.js");
 
 const createPhone = async (req, res) => {
   try {

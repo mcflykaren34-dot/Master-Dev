@@ -1,4 +1,4 @@
-const { createComapny, loginCompany } = require("../controller/companyController");
+const { createComapny, loginCompany } = require("../controller/company");
 
 const router = require("express").Router();
 

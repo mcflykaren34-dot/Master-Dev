@@ -1,5 +1,5 @@
 const Router = require('express').Router;
-const {createPhone, getPhone} = require('../controller/phoneController');
+const {createPhone, getPhone} = require('../controller/phone');
 
 const router = Router();
 
