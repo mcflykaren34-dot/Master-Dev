@@ -9,7 +9,7 @@ const config = {
         dbName: process.env.MONGO_DB || "template",
 
         // Environment Settings
-        route: process.env.ROUTE || 'api',
+        route: process.env.ROUTE || '/api',
         port: process.env.PORT || '5000',
         nodeEnv: process.env.NODE_ENV || 'DEV',
 

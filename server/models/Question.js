@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
+const CONSTANTS = require('../lib/contants');
 const Schema = mongoose.Schema;
 
 // Define the schema for a question
 const QuestionSchema = new Schema({
   type: {
     type: String,
-    enum: ['short', 'mcq'],
+    enum: Object.values(CONSTANTS.QUESTION_TYPE),
     required: true
   },
   q: {
@@ -14,7 +15,7 @@ const QuestionSchema = new Schema({
   },
   options: {
     type: [String],
-    default: ['']
+    default: []
   }
 });
 
@@ -43,7 +44,7 @@ const QuestionSetSchema = new Schema({
     type: String
   },
   questions: [QuestionSchema]
-});
+}, { timestamps: true });
 
-const QuestionSet = mongoose.model('QuestionSet', QuestionSetSchema);
-module.exports = QuestionSet;
+const QuestionSetModel = mongoose.model('QuestionSet', QuestionSetSchema);
+module.exports = QuestionSetModel;

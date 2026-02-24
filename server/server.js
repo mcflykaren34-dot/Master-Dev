@@ -1,39 +1,73 @@
-const express = require('express');
-const cors = require('cors');
-require('./config/mongoose').connect();
+const http = require('http');
+const cluster = require('cluster');
+const os = require('os');
+const app = require('./app');
+const config = require('./config/config');
 
-const bodyParser = require('body-parser');
+const port = config.server.port;
 
-const usersRoute = require('./routes/users.js');
-const questionsRoute = require('./routes/questions.js');
-const customerRoute = require('./routes/customer.js');
-const phoneRoute = require('./routes/phone.js');
-const config = require('./config/config.js');
-const app = express();
-const corsOpts = {
-  origin: '*',
+const isProd = config.server.nodeEnv === 'PROD';
 
-  methods: [
-    'GET',
-    'POST',
-  ],
+// ✅ DEV: simple single-process server (no cluster involvement)
+if (!isProd) {
+  const server = http.createServer(app);
 
-  allowedHeaders: [
-    'Content-Type',
-  ],
-};
+  server.listen(port, () => {
+    const addr = server.address();
+    const host = addr?.address === '::' ? 'localhost' : addr?.address;
 
-app.use(cors(corsOpts));
+    console.log(`\n=============== 🚀🚀🚀 Server running on port ${port} 🚀🚀🚀 ===============`);
+    console.log(`=============== 🚀🚀🚀 Current time: ${new Date().toString()} 🚀🚀🚀 ===============`);
 
-app.use(express.json());
+  });
 
+  server.on('error', (err) => {
+    console.error(`Handling server error: ${err.message}`);
+    server.close(() => process.exit(1));
+  });
 
-app.use('', customerRoute);
-app.use('/api/users', usersRoute);
-app.use('/api/form', questionsRoute);
-app.use('', phoneRoute);
+  return; // important: stop here
+}
 
-app.listen(config.server.port, () => {
-  console.log(`🚀 Server is running on port ${config.server.port}`);
-});
+// ✅ PROD: cluster mode
+if (cluster.isMaster) {
+  const numWorkers = os.cpus().length;
+  console.log(`Master ${process.pid} starting ${numWorkers} workers...`);
 
+  let hasLoggedListening = false;
+
+  for (let i = 0; i < numWorkers; i++) {
+    const worker = cluster.fork();
+
+    worker.on('message', (message) => {
+      if (!hasLoggedListening && message?.type === 'LISTENING') {
+        hasLoggedListening = true;
+
+        const addr = message.address;
+        const host = addr?.address === '::' ? 'localhost' : addr?.address;
+
+        console.log(
+          `Server running on port ${port}.  http://${host}:${addr.port} at  on ${config.server.nodeEnv} environment (master PID ${process.pid})`
+        );
+      }
+    });
+  }
+
+  cluster.on('exit', (worker, code, signal) => {
+    console.error(`Worker ${worker.process.pid} died (code ${code}, signal ${signal}). Restarting...`);
+    cluster.fork();
+  });
+} else {
+  const server = http.createServer(app);
+
+  server.listen(port, () => {
+    if (process.send) {
+      process.send({ type: 'LISTENING', address: server.address() });
+    }
+  });
+
+  server.on('error', (err) => {
+    console.error(`Handling server error: ${err.message}`);
+    server.close(() => process.exit(1));
+  });
+}

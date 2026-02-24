@@ -7,7 +7,7 @@ import Navbar from "../Landing/Navbar";
 
 const UserSignup = () => {
   const [formData, setFormData] = useState({
-    name:"",
+    name: "",
     companyEmail: "",
     walletAddress: "",
   });
@@ -16,7 +16,7 @@ const UserSignup = () => {
   const [ver, setVer] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
-    console.log("sg",token)
+    console.log("sg", token)
     if (token != null) {
       alert("You are already logged in");
       window.location.href = "/home";
@@ -27,7 +27,7 @@ const UserSignup = () => {
       const { companyEmail } = formData;
       const generateOTP = Math.floor(1000 + Math.random() * 9000);
       setReal(generateOTP);
-      const response = await axios.post("https://critiqall-backend.onrender.com/sendOTP", {
+      const response = await axios.post("https://critiqall-backend.onrender.com/customers/sendOTP", {
         otp: generateOTP,
         email: companyEmail,
       });
@@ -88,7 +88,7 @@ const UserSignup = () => {
 
       // Example POST request using axios
       const response = await axios.post(
-        "https://critiqall-backend.onrender.com/customer/create",
+        "https://critiqall-backend.onrender.com/customers/create",
         dataToSend
       );
       console.log(response.data); // Handle response as needed
@@ -114,7 +114,7 @@ const UserSignup = () => {
           <div className="form-group">
             <label htmlFor="companyName" className="form-label">
               Name:
-              </label>
+            </label>
             <input
               type="text"
               id="companyName"
