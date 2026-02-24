@@ -4,9 +4,15 @@ const USER_ROLE = {
     COMPANY: "COMPANY",
 }
 
+const QUESTION_TYPE = {
+    SHORT: "SHORT",
+    MCQ: "MCQ",
+}
+
 
 const CONSTANTS = {
-    USER_ROLE
+    USER_ROLE,
+    QUESTION_TYPE
 }
 
 module.exports = CONSTANTS

@@ -1,54 +1,41 @@
+const { wrapAsync } = require("../lib/wrapAsync.js");
 const QuestionSet = require("../models/question.js");
+const QuestionService = require("../services/question.js");
 
-const createQuestion = async (req, res) => {
-  try {
-    console.log("Body :", req.body);
-    const {
-      productName,
-      productDescription,
-      productImageUrl,
-      isOrderIdTracking,
-      reviewDate,
-      excelFile,
-      questions,
-    } = req.body;
+const create = async (req, res) => {
+  const payload = {
+    productName: req.body.productName,
+    productDescription: req.body.productDescription,
+    productImageUrl: req.body.productImageUrl,
+    isOrderIdTracking: req.body.isOrderIdTracking,
+    reviewDate: req.body.isOrderIdTracking ? req.body.reviewDate : null,
+    excelFile: !req.body.isOrderIdTracking ? req.body.excelFile : null,
+    questions: req.body.questions,
+  };
 
-    const newQuestionSet = new QuestionSet({
-      productName: productName,
-      productDescription: productDescription,
-      productImageUrl: productImageUrl,
-      isOrderIdTracking: isOrderIdTracking,
-      reviewDate: isOrderIdTracking ? reviewDate : null,
-      excelFile: !isOrderIdTracking ? excelFile : null,
-      questions: questions,
-    });
+  const resp = await QuestionService.create(payload);
 
-    const data = await newQuestionSet.save();
-    res
-      .status(201)
-      .send({ data: data, message: "Form submitted successfully!" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Server error");
-  }
+  res.status(201).send({ data: resp, message: "Form submitted successfully!" });
 };
 
-const getQuestions = async (req, res) => {
-  try {
-    console.log(req.params);
-    const { id } = req.params;
-    const questionSet = await QuestionSet.findOne({ _id: id });
-    if (!questionSet) {
-      return res.status(404).json({ message: "Questions not found" });
-    }
-    res.json({
-      isOrderIdTracking: questionSet.isOrderIdTracking,
-      questions: questionSet.questions,
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+const getById = async (req, res) => {
+  const { id } = req.params;
+
+  const questionSet = await QuestionService.getById(id);
+
+  if (!questionSet) {
+    return res.status(404).json({ message: "Questions not found" });
   }
+
+  res.json({
+    isOrderIdTracking: questionSet.isOrderIdTracking,
+    questions: questionSet.questions,
+  });
 };
 
-module.exports = { createQuestion, getQuestions };
+const QuestionController = {
+  create: wrapAsync(create),
+  getById: wrapAsync(getById),
+};
+
+module.exports = QuestionController;
