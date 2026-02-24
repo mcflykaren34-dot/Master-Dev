@@ -2,8 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-// DB import
-require('./config/mongoose').connect();
+
 
 // Packages import
 const rateLimit = require('express-rate-limit');
