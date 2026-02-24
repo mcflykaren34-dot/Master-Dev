@@ -233,7 +233,7 @@ const FormComponent = () => {
       console.log(allData);
       const response = await axios({
         method: "post",
-        url: "https://critiqall-backend.onrender.com/api/form/question",
+        url: "https://critiqall-backend.onrender.com/api/form/questions",
         data: allData,
       });
       console.log(response);
