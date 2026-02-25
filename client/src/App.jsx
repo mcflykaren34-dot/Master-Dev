@@ -112,14 +112,14 @@ function App() {
         ))}
 
         {/* Customer protected routes */}
-        <Route element={<ProtectedRoutes user="customer" />}>
+        <Route element={<ProtectedRoutes user="CUSTOMER" />}>
           {customerProtectedRoutes.map(({ path, element }) => (
             <Route key={path} path={path} element={element} />
           ))}
         </Route>
 
         {/* Company protected routes */}
-        <Route element={<ProtectedRoutes user="company" />}>
+        <Route element={<ProtectedRoutes user="COMPANY" />}>
           {companyProtectedRoutes.map(({ path, element }) => (
             <Route key={path} path={path} element={element} />
           ))}
