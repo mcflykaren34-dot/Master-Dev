@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const http = require('http');
 const cluster = require('cluster');
 const os = require('os');
