@@ -49,9 +49,43 @@ export const StateProvider = ({ children }) => {
   React.useEffect(() => {
     console.log(userData);
   }, [userData]);
+
+  async function switchToFuji() {
+  const FUJI_CHAIN_ID = "0xA869"; // 43113
+  try {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: FUJI_CHAIN_ID }],
+    });
+  } catch (error) {
+    if (error.code === 4902) {
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: FUJI_CHAIN_ID,
+            chainName: "Avalanche Fuji C-Chain",
+            rpcUrls: ["https://api.avax-test.network/ext/bc/C/rpc"],
+            nativeCurrency: {
+              name: "Avalanche",
+              symbol: "AVAX",
+              decimals: 18,
+            },
+            blockExplorerUrls: ["https://testnet.snowtrace.io/"],
+          },
+        ],
+      });
+    } else {
+      throw error;
+    }
+  }
+}
+
   const initializeWeb3 = useCallback(async () => {
+    // await switchToFuji();
     const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
     const networkId = await web3.eth.net.getId();
+
     if (networkId != 43113) {
       toast.warning("Change network to Fuji");
     }
@@ -77,6 +111,7 @@ export const StateProvider = ({ children }) => {
         const accounts = await window.ethereum.request({
           method: "eth_requestAccounts",
         });
+
         setWalletAddress(accounts[0]);
         setWalletConnected(true);
         // toast.success("Wallet connected!");
@@ -114,7 +149,7 @@ export const StateProvider = ({ children }) => {
     if (walletConnected) {
       try {
         const response = await axios.post(
-          "https://critiqall-backend.onrender.com/customers/login",
+          "http://localhost:5000/customers/login",
           {
             walletAddress,
           }

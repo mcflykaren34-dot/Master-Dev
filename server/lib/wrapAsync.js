@@ -1,12 +1,20 @@
 const { printErrorLog, formatErrorString } = require("./helper");
 
 exports.wrapAsync = (func) => async (req, res, next) => {
-    try {
-        await func(req, res);
-    } catch (error) {
-        console.log({ error: error.response });
+  try {
+    return await func(req, res, next);
+  } catch (error) {
+    console.log({ error });
 
-        printErrorLog(`${req.originalUrl} catch: ` + formatErrorString(error));
-        return next(error);
+    try {
+      printErrorLog(`${req.originalUrl} catch: ` + formatErrorString(error));
+    } catch (logErr) {
+      console.error("Error while logging:", logErr);
     }
+
+    return next(error);
+  }
 };
+
+// exports.wrapAsync = (func) => (req, res, next) =>
+//   Promise.resolve(func(req, res, next)).catch(next);
