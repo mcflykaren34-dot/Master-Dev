@@ -1,5 +1,4 @@
 const dotenv = require('dotenv').config();
-<<<<<<< HEAD
 const http = require("http");
 const cluster = require("cluster");
 const os = require("os");
@@ -8,13 +7,6 @@ const config = require("./config/config");
 
 // DB import
 require("./config/mongoose").connect();
-=======
-const http = require('http');
-const cluster = require('cluster');
-const os = require('os');
-const app = require('./app');
-const config = require('./config/config');
->>>>>>> origin/refactor/frontend
 
 const port = config.server.port;
 
