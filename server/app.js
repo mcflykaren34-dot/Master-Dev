@@ -119,10 +119,10 @@ app.get(config.server.route + '/pingServer', (req, res) => {
 });
 
 
-app.use(`${config.server.route}/customers`, customerRoute);
-app.use(`${config.server.route}/users`, usersRoute);
-app.use(`${config.server.route}/questions`, questionsRoute);
-app.use(`${config.server.route}/phone`, phoneRoute);
+app.use(`/customers`, customerRoute);
+app.use(`/users`, usersRoute);
+app.use(`/questions`, questionsRoute);
+app.use(`/phone`, phoneRoute);
 
 // ----------------------------Middleware for catching 404 and forward to error handler
 app.use((req, res, next) => {
