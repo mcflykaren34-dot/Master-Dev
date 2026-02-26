@@ -1,6 +1,5 @@
 const config = {
     server: {
-
         // Mongo DB Credentials
         prodDbUrl: process.env.MONGO_DB_HOST,
         mongoHost: process.env.MONGO_DB_HOST || '127.0.0.1',
