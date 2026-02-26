@@ -14,6 +14,7 @@ const UserSignup = () => {
   const [otp, setOtp] = useState("");
   const [real, setReal] = useState();
   const [ver, setVer] = useState(false);
+
   useEffect(() => {
     const token = localStorage.getItem("token");
     console.log("sg", token)
@@ -22,12 +23,13 @@ const UserSignup = () => {
       window.location.href = "/home";
     }
   }, []);
+
   const sendOTP = async () => {
     try {
       const { companyEmail } = formData;
       const generateOTP = Math.floor(1000 + Math.random() * 9000);
       setReal(generateOTP);
-      const response = await axios.post("https://critiqall-backend.onrender.com/customers/sendOTP", {
+      const response = await axios.post("http://critiqall-backend.onrender.com/customers/sendOTP", {
         otp: generateOTP,
         email: companyEmail,
       });
@@ -39,6 +41,7 @@ const UserSignup = () => {
       console.error("Error:", error);
     }
   };
+
   const verify = async () => {
     try {
       if (otp != real) {
@@ -52,6 +55,8 @@ const UserSignup = () => {
       console.error("Error:", error);
     }
   };
+
+
   useEffect(() => {
     setVer(false);
   }, []);
